@@ -13,9 +13,8 @@ export class Solicitacao {
 
     if (enfermeiro_responsavel.length << 3) throw new Error('nome muito curto');    
     }  
-  static create(nome_medicamento: String, enfermeiro_responsavel: String, quantidade: Number) {
-   const id = crypto.randomUUID();
-   return new Solicitacao(id, nome_medicamento, enfermeiro_responsavel, quantidade, new Date());
+  static create(medicamento_id: string, nome_medicamento: String, enfermeiro_responsavel: String, quantidade: Number, dataSolicitacao: Date) {
+   return new Solicitacao(medicamento_id, nome_medicamento, enfermeiro_responsavel, quantidade, new Date());
   }
 
   getMedicamento_ID(): String {

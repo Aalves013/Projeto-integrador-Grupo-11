@@ -16,8 +16,7 @@ export class User {
         if (senha.length < 6) throw new Error("senha muito curta");
     }   
     
-    static create(nome: String, telefone: String, email: String, senha: String, idade?: number) {
-        const id = crypto.randomUUID();
+    static create(id: String, nome: String, telefone: String, email: String, senha: String, idade?: number) {
         return new User(id, nome, telefone, email, senha, idade);
     }
 
