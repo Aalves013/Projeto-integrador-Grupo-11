@@ -2,13 +2,11 @@ export class User {
     constructor(
         private id: String,
         private nome: String,
-        private telefone: String,
         private email: String,
         private senha: String,
-        private idade?: number
+        private tipo_cadastro: String
     ) {
         if (!nome) throw new Error("nome obrigatório");
-        if (!telefone) throw new Error("telefone obrigatório");
         if (!email) throw new Error("email obrigatório");
         if (!senha) throw new Error("senha obrigatória");
 
@@ -16,8 +14,8 @@ export class User {
         if (senha.length < 6) throw new Error("senha muito curta");
     }   
     
-    static create(id: String, nome: String, telefone: String, email: String, senha: String, idade?: number) {
-        return new User(id, nome, telefone, email, senha, idade);
+    static create(id: String, nome: String, email: String, senha: String, tipo_cadastro: String) {
+        return new User(id, nome, email, senha, tipo_cadastro);
     }
 
     gitId(): String {
@@ -28,10 +26,6 @@ export class User {
         return this.nome;
     }
 
-    gitTelefone(): String {
-        return this.telefone;
-    }
-
     gitEmail(): String {
         return this.email;
     }
@@ -40,8 +34,8 @@ export class User {
         return this.senha;
     }
 
-    gitIdade(): Number | undefined {
-        return this.idade;
+    gitTipo_cadastro(): String{
+        return this.tipo_cadastro;
     }
 
     

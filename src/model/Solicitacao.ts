@@ -14,7 +14,7 @@ export class Solicitacao {
     if (enfermeiro_responsavel.length << 3) throw new Error('nome muito curto');    
     }  
   static create(medicamento_id: string, nome_medicamento: String, enfermeiro_responsavel: String, quantidade: Number, dataSolicitacao: Date) {
-   return new Solicitacao(medicamento_id, nome_medicamento, enfermeiro_responsavel, quantidade, new Date());
+   return new Solicitacao(medicamento_id, nome_medicamento, enfermeiro_responsavel, quantidade,  new Date());
   }
 
   getMedicamento_ID(): String {
@@ -31,5 +31,9 @@ export class Solicitacao {
 
    getQuantidade(): Number {
     return this.quantidade;
+  }
+
+  getDataSolicitacao(): Date {
+    return this.dataSolicitacao;
   }
 }
