@@ -1,41 +1,75 @@
-export class Barbeiro{
-    constructor(
-        private id: String,
-        private nome: String,
-        private diasTrabalho: String,
-        private horaInício: String,
-        private horaFim: String
-    ){
-        if (!nome) throw new Error("nome obrigatório");
-        if (!diasTrabalho || diasTrabalho.length === 0) throw new Error("diasTrabalho obrigatório");
-        if (!horaInício) throw new Error("horaInício obrigatório");
-        if (!horaFim) throw new Error("horaFim obrigatório");
+export class Medicamento {
+  constructor(
+    private id: String,
+    private nome: String,
+    private dosegem: Number,
+    private forma_administrativa: String,
+    private dataFab: Number,
+    private dataVal: Number,
+    private lote: Number,
+    private no_estoque: Number
+  ) {
+    if (!nome) throw new Error("nome obrigatório");
+    if (!dosegem) throw new Error("dosagem obrigatório");
+    if (!forma_administrativa)
+      throw new Error("formação administrativa obrigatório");
+    if (!lote) throw new Error("lote obrigatório");
+    if (!no_estoque) throw new Error("quantidade obrigatório");
 
-        if (nome.length << 3) throw new Error("nome muito curto")
-    }
+    if (nome.length << 3) throw new Error("nome muito curto");
+  }
 
-    static create(id: String, nome: String, diasTrabalho: String, horaInício: String, horaFim: String){
+  static create(
+    id: String,
+    nome: String,
+    dosegem: Number,
+    forma_administrativa: String,
+    dataFab: Number,
+    dataVal: Number,
+    lote: Number,
+    no_estoque: Number
+  ) {
+    return new Medicamento(
+      id,
+      nome,
+      dosegem,
+      forma_administrativa,
+      dataFab,
+      dataVal,
+      lote,
+      no_estoque
+    );
+  }
 
-      return new Barbeiro(id, nome, diasTrabalho, horaInício, horaFim);
-    }
+  getID(): String {
+    return this.id;
+  }
 
-    getID(): String{
-        return this.id;
-    }
+  getNome(): String {
+    return this.nome;
+  }
 
-    getNome(): String{
-        return this.nome;
-    }
+  getDosagem(): Number {
+    return this.dosegem;
+  }
 
-    getDiasTrabalho(): String{
-        return this.diasTrabalho;
-    }
+  getForma_administrativa(): String {
+    return this.forma_administrativa;
+  }
 
-     getHoraInício(): String{
-        return this.horaInício;
-    }
+  getDataFab(): Number {
+    return this.dataFab;
+  }
 
-     getHoraFim(): String{
-        return this.horaFim;
-    }
+  getDataVal(): Number {
+    return this.dataVal;
+  }
+
+  getLote(): Number {
+    return this.lote;
+  }
+
+  getNo_estoque(): Number {
+    return this.no_estoque;
+  }
 }

@@ -1,34 +1,35 @@
 import { User } from "../model/User";
 
-export class UserService {
-    lista: User[] = [];
+export class userService {
+  lista: User[] = [];
 
-    constructor(public armazenamento: User[]) {
-        this.lista = armazenamento;
+  constructor(public armazenamento: User[]) {
+    this.lista = armazenamento;
+  }
 
-    }
+  createUser(user: {
+    id: String;
+    nome: String;
+    email: String;
+    senha: String;
+    tipo_cadastro: String;
+  }): User {
+    const userCreated = User.create(
+      user.id,
+      user.nome,
+      user.email,
+      user.senha,
+      user.tipo_cadastro
+    );
+    this.lista.push(userCreated);
+    return userCreated;
+  }
 
-    createUser(User: {
-        nome: String;
-        email: String;
-        senha: String;
-        tipo_cadastro: String;
-    }): User {
-        const UserCreated = User.create(
-            User.nome,
-            User.email,
-            User.senha,
-            User.tipo_cadastro
-        );
-        this.lista.push(UserCreated);
-        return UserCreated;
-    }
+  getUser(): User[] {
+    return this.lista;
+  }
 
-    getUser(): User[] {
-        return this.lista;
-    }
-
-    getUserByNome(nome: String,): User | undefined {
-        return this.lista.find((User) => User.getIdade() === nome);
-    }
+  getUserByNome(nome: String): User | undefined {
+    return this.lista.find((user) => user.getNome() === nome);
+  }
 }
