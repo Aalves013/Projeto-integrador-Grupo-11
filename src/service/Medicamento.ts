@@ -8,7 +8,6 @@ export class MedicamentoService {
   }
 
   createMedicamento(medicamento: {
-    id: String;
     nome: String;
     dosegem: Number;
     forma_administrativa: String;
@@ -18,14 +17,14 @@ export class MedicamentoService {
     no_estoque: Number;
   }): Medicamento {
     const medicamentoCreated = new Medicamento(
-      medicamento.id,
-      medicamento.nome,
-      medicamento.dosegem,
-      medicamento.forma_administrativa,
-      medicamento.dataFab,
-      medicamento.dataVal,
-      medicamento.lote,
-      medicamento.no_estoque
+      Medicamento.nome;
+      Medicamento.dosegem;
+      Medicamento.forma_administrativa;
+      Medicamento.dataFab;
+      Medicamento.dataVal;
+      Medicamento.lote;
+      Medicamento.no_estoque;
+      Medicamento.complemento;
     );
     this.lista.push(medicamentoCreated);
     return medicamentoCreated;
