@@ -8,19 +8,22 @@ export class solicitacaoService {
   }
 
   createSolicitacao(solicitacao: {
-    medicamento_id: string;
     nome_medicamento: String;
     enfermeiro_responsavel: String;
     quantidade: Number;
     dataSolicitacao: Date;
   }): Solicitacao {
-    const createsolicitacao = Solicitacao.create(
-      solicitacao.medicamento_id,
+    const solicitacaoCreated = Solicitacao.create(
       solicitacao.nome_medicamento,
       solicitacao.enfermeiro_responsavel,
-      solicitacao.quantidade
+      solicitacao.quantidade,
+      solicitacao.dataSolicitacao
     );
+    this.lista.push(solicitacaoCreated);
+    return solicitacaoCreated;
+  }
 
-    return createsolicitacao;
+  getSolicitacao(): Solicitacao[] {
+    return this.lista;
   }
 }
