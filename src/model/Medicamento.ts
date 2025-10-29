@@ -7,7 +7,9 @@ export class Medicamento {
     private dataFab: Number,
     private dataVal: Number,
     private lote: Number,
-    private no_estoque: Number
+    private no_estoque: Number,
+    private complemento: String
+
   ) {
     if (!nome) throw new Error("nome obrigatório");
     if (!dosegem) throw new Error("dosagem obrigatório");
@@ -27,7 +29,8 @@ export class Medicamento {
     dataFab: Number,
     dataVal: Number,
     lote: Number,
-    no_estoque: Number
+    no_estoque: Number,
+    complemento: String
   ) {
     return new Medicamento(
       id,
@@ -37,7 +40,8 @@ export class Medicamento {
       dataFab,
       dataVal,
       lote,
-      no_estoque
+      no_estoque,
+      complemento
     );
   }
 
@@ -71,5 +75,9 @@ export class Medicamento {
 
   getNo_estoque(): Number {
     return this.no_estoque;
+  }
+
+  getComplemento(): String {
+    return this.complemento;
   }
 }
