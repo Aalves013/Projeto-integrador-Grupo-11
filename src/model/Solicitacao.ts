@@ -1,6 +1,5 @@
 export class Solicitacao {
   constructor(
-    private medicamento_id: String,
     private nome_medicamento: String,
     private enfermeiro_responsavel: String,
     private quantidade: Number,
@@ -14,22 +13,16 @@ export class Solicitacao {
     if (enfermeiro_responsavel.length << 3) throw new Error("nome muito curto");
   }
   static create(
-    medicamento_id: string,
     nome_medicamento: String,
     enfermeiro_responsavel: String,
     quantidade: Number
   ) {
     return new Solicitacao(
-      medicamento_id,
       nome_medicamento,
       enfermeiro_responsavel,
       quantidade,
       new Date()
     );
-  }
-
-  getMedicamento_ID(): String {
-    return this.medicamento_id;
   }
 
   getNome_medicamento(): String {
