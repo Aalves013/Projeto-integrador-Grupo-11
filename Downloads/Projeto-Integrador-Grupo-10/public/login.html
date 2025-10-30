@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Tela de Login</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-image">
+            <img src="assets/img/medicina.svg" alt="Medicina">
+        </div>
+
+        <div class="form">
+            <form id="formLogin">
+                <div class="form-header">
+                    <div class="title">
+                        <h1>Entrar</h1>
+                    </div>
+                    <div class="login-button">
+                        <button type="button"><a href="cadastro.html">Cadastre-se</a></button>
+                    </div>
+                </div>
+
+                <!-- Mensagem de erro/sucesso -->
+                <div id="mensagem" style="display: none; padding: 10px; margin-bottom: 15px; border-radius: 5px; text-align: center;"></div>
+
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" placeholder="Digite seu Email" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="password">Senha</label>
+                        <input id="password" type="password" name="password" placeholder="Digite sua senha" required>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#">Esqueceu a senha?</a>
+                    </div>
+                </div>
+
+                <div class="continue-button">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Pegando o formulário
+        const form = document.getElementById('formLogin');
+        const mensagemDiv = document.getElementById('mensagem');
+
+        // Função para mostrar mensagem
+        function mostrarMensagem(texto, tipo) {
+            mensagemDiv.textContent = texto;
+            mensagemDiv.style.display = 'block';
+            
+            if (tipo === 'erro') {
+                mensagemDiv.style.backgroundColor = '#ffebee';
+                mensagemDiv.style.color = '#c62828';
+                mensagemDiv.style.border = '1px solid #ef5350';
+            } else {
+                mensagemDiv.style.backgroundColor = '#e8f5e9';
+                mensagemDiv.style.color = '#2e7d32';
+                mensagemDiv.style.border = '1px solid #66bb6a';
+            }
+        }
+
+        // Quando o formulário for enviado
+        form.addEventListener('submit', async function(evento) {
+            evento.preventDefault(); // Impede o envio normal do formulário
+
+            // Pegando os valores digitados
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('password').value;
+
+            try {
+                // Enviando para o backend
+                const resposta = await fetch('http://localhost:3000/funcionarios/autenticacao', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        senha: senha
+                    })
+                });
+
+                // Convertendo a resposta para JSON
+                const dados = await resposta.json();
+
+                if (resposta.ok) {
+                    // Login com sucesso!
+                    mostrarMensagem('Login realizado com sucesso! Redirecionando...', 'sucesso');
+                    
+                    // Salvando dados do usuário (para usar no depósito)
+                    localStorage.setItem('usuarioLogado', JSON.stringify(dados.dados));
+                    
+                    // Redirecionar para a página do depósito após 1 segundo
+                    setTimeout(function() {
+                        window.location.href = 'deposito.html';
+                    }, 1000);
+                } else {
+                    // Erro no login
+                    mostrarMensagem(dados.erro || 'Email ou senha incorretos!', 'erro');
+                }
+
+            } catch (erro) {
+                // Erro de conexão
+                mostrarMensagem('Erro ao conectar com o servidor. Verifique se o backend está rodando!', 'erro');
+                console.error('Erro:', erro);
+            }
+        });
+    </script>
+</body>
+
+</html>

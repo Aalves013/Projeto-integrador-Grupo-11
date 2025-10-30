@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Hospitalar - Depósito de Medicamentos</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            min-height: 90vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            padding: 30px 20px;
+            color: white;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hospital-icon {
+            width: 50px;
+            height: 50px;
+            background: #3498db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+
+        .hospital-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .categories-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 20px 0 15px;
+            text-transform: uppercase;
+        }
+
+        .main-content {
+            flex: 1;
+            background: linear-gradient(135deg, #E7F0FA 0%, #D4E4F7 100%);
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            flex: 1;
+            max-width: 500px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        .btn-add {
+            padding: 15px 25px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 25px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .medications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .medication-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .medication-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .medication-card.critical {
+            border: 2px solid #e74c3c;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .medication-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .medication-active {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-critico {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .badge-atencao {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .badge-normal {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .card-body {
+            margin: 15px 0;
+            padding: 15px 0;
+            border-top: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .stock-info {
+            color: #34495e;
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-info {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .detalhes-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .detalhe-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detalhe-item strong {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .detalhe-item span {
+            color: #2c3e50;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: #229954;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="hospital-icon">+</div>
+                <h2 class="hospital-name">UTI - Hospital São Bento</h2>
+            </div>
+            <nav>
+                <ul class="nav-list">
+                    <li><div class="nav-link">🏠 Início</div></li>
+                    <li><div class="nav-link" onclick="abrirModalCadastro()">➕ Cadastrar Medicamento</div></li>
+                </ul>
+                <h3 class="categories-title">Filtros</h3>
+                <ul class="nav-list">
+                    <li><div class="nav-link" onclick="filtrarStatus('todos')">📦 Todos</div></li>
+                    <li><div class="nav-link" onclick="filtrarStatus('critico')">⚠️ Estoque baixo </div></li>
+                    <li><div class="nav-link" onclick="filtrarStatus('atencao')">⚡ Estoque médio</div></li>
+                    <li><div class="nav-link" onclick="filtrarStatus('normal')">✅ Estoque normal</div></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="page-title">Depósito de Medicamentos</h1>
+
+            <div class="search-section">
+                <input type="text" class="search-input" placeholder="Buscar medicamento..." id="searchInput" onkeyup="buscar()">
+                <button class="btn-add" onclick="abrirModalCadastro()">➕ Cadastrar Novo</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Total de Medicamentos</div>
+                    <div class="stat-value" id="totalMeds">10</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Estoque Normal</div>
+                    <div class="stat-value" style="color: #27ae60;" id="normalMeds">7</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Estoque baixo</div>
+                    <div class="stat-value" style="color: #e74c3c;" id="criticalMeds">2</div>
+                </div>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="tab-button active" onclick="filtrarStatus('todos')">Todos</button>
+                <button class="tab-button" onclick="filtrarStatus('critico')">Estoque baixo </button>
+                <button class="tab-button" onclick="filtrarStatus('atencao')">Estoque médio</button>
+                <button class="tab-button" onclick="filtrarStatus('normal')">Estoque normal</button>
+            </div>
+
+            <div class="medications-grid" id="medicationsGrid"></div>
+        </main>
+    </div>
+
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="fecharModal('detailsModal')">×</span>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="detalhes-grid" id="modalDetails"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="cadastroModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="fecharModal('cadastroModal')">×</span>
+            <h2 class="modal-title">Cadastrar Novo Medicamento</h2>
+            <form onsubmit="cadastrarMedicamento(event)">
+                <div class="form-group">
+                    <label>Nome do Medicamento *</label>
+                    <input type="text" id="cadNome" required>
+                </div>
+                <div class="form-group">
+                    <label>Princípio Ativo *</label>
+                    <input type="text" id="cadPrincipio" required>
+                </div>
+                <div class="form-group">
+                    <label>Nome Comercial</label>
+                    <input type="text" id="cadComercial">
+                </div>
+                <div class="form-group">
+                    <label>Apresentação *</label>
+                    <textarea id="cadApresentacao" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade em Estoque *</label>
+                    <input type="number" id="cadQuantidade" required min="0">
+                </div>
+                <div class="form-group">
+                    <label>Quantidade Máxima *</label>
+                    <input type="number" id="cadMaxima" required min="1">
+                </div>
+                <div class="form-group">
+                    <label>Conservação *</label>
+                    <textarea id="cadConservacao" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Diluição</label>
+                    <textarea id="cadDiluicao"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Dose Usual</label>
+                    <textarea id="cadDose"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Efeitos Colaterais</label>
+                    <textarea id="cadEfeitos"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Cadastrar Medicamento</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let medicamentos = [
+            {
+                id: 1, nome: "Espironolactona", principioAtivo: "Espironolactona",
+                comercial: "Aldactone, Diacqua", apresentacao: "Comprimidos de 25mg, 50mg ou 100mg",
+                quantidade: 320, quantidadeMaxima: 500,
+                conservacao: "Temperatura ambiente (15°C a 30°C). Proteger da umidade e da luz.",
+                diluicao: "Uso oral: não necessita diluição.",
+                doseUsual: "Hipertensão: 25-50mg/dia; Insuficiência cardíaca: 25-100mg/dia",
+                efeitosColaterais: "Hipercalemia, náusea, vômito, sonolência", status: "normal"
+            },
+            {
+                id: 2, nome: "Lorazepam", principioAtivo: "Lorazepam",
+                comercial: "Lorax, Lorapeze", apresentacao: "Comprimidos de 1mg e 2mg; Solução 2mg/mL",
+                quantidade: 85, quantidadeMaxima: 300,
+                conservacao: "Temperatura ambiente. Proteger da luz.",
+                diluicao: "Diluir em SF 0,9% ou glicose 5%.",
+                doseUsual: "Ansiedade oral: 1-3mg/dia",
+                efeitosColaterais: "Sonolência, tontura, confusão mental", status: "critico"
+            },
+            {
+                id: 3, nome: "Enoxaparina Sódica", principioAtivo: "Enoxaparina sódica",
+                comercial: "Clexane, Versa", apresentacao: "Seringas prontas: 20mg, 40mg, 60mg",
+                quantidade: 450, quantidadeMaxima: 600,
+                conservacao: "Temperatura ambiente. Não refrigerar.",
+                diluicao: "Não diluir. Administrar SC no abdome.",
+                doseUsual: "Profilaxia: 20-40mg SC 1x/dia",
+                efeitosColaterais: "Hemorragia, trombocitopenia", status: "normal"
+            },
+            {
+                id: 4, nome: "Gentamicina", principioAtivo: "Gentamicina",
+                comercial: "Garamicina", apresentacao: "Solução 40mg/mL",
+                quantidade: 210, quantidadeMaxima: 400,
+                conservacao: "15°C-30°C. Proteger da luz.",
+                diluicao: "IV: diluir em 100mL SF 0,9%.",
+                doseUsual: "3-5mg/kg/dia divididos 8/8h",
+                efeitosColaterais: "Nefrotoxicidade, ototoxicidade", status: "atencao"
+            },
+            {
+                id: 5, nome: "Suxametônio", principioAtivo: "Succinilcolina",
+                comercial: "Anectine", apresentacao: "Solução 100mg/5mL",
+                quantidade: 180, quantidadeMaxima: 250,
+                conservacao: "Refrigerado 2°C-8°C.",
+                diluicao: "Sem diluição IV ou diluir em SF 0,9%.",
+                doseUsual: "IV: 0,6-1mg/kg",
+                efeitosColaterais: "Apneia, bradicardia, hipercalemia", status: "normal"
+            },
+            {
+                id: 6, nome: "Amiodarona", principioAtivo: "Amiodarona",
+                comercial: "Ancoron", apresentacao: "Comprimidos 200mg; Solução 50mg/mL",
+                quantidade: 95, quantidadeMaxima: 300,
+                conservacao: "Temperatura ambiente. Proteger da luz.",
+                diluicao: "Diluir em 250mL SG 5%.",
+                doseUsual: "VO: 600-800mg/dia",
+                efeitosColaterais: "Bradicardia, hipotensão", status: "critico"
+            },
+            {
+                id: 7, nome: "Cloreto de Potássio", principioAtivo: "Cloreto de potássio",
+                comercial: "KCl", apresentacao: "Solução 10%, 15%",
+                quantidade: 520, quantidadeMaxima: 600,
+                conservacao: "Temperatura ambiente. Não congelar.",
+                diluicao: "NUNCA sem diluição! Diluir em SG 5%.",
+                doseUsual: "20-40mEq/dia",
+                efeitosColaterais: "Hipercalemia, náusea", status: "normal"
+            },
+            {
+                id: 8, nome: "Anfotericina B", principioAtivo: "Anfotericina B",
+                comercial: "Fungizon", apresentacao: "Pó 50mg/frasco",
+                quantidade: 145, quantidadeMaxima: 300,
+                conservacao: "Refrigerado 2°C-8°C.",
+                diluicao: "Diluir em SG 5%. Nunca SF 0,9%.",
+                doseUsual: "0,25-1mg/kg/dia IV",
+                efeitosColaterais: "Febre, nefrotoxicidade", status: "atencao"
+            },
+            {
+                id: 9, nome: "Dexmedetomidina", principioAtivo: "Dexmedetomidina",
+                comercial: "Precedex", apresentacao: "Solução 100mcg/mL",
+                quantidade: 380, quantidadeMaxima: 500,
+                conservacao: "15°C-30°C. Proteger da luz.",
+                diluicao: "Diluir em SF 0,9% para 4mcg/mL.",
+                doseUsual: "0,2-0,7mcg/kg/h",
+                efeitosColaterais: "Bradicardia, hipotensão", status: "normal"
+            },
+            {
+                id: 10, nome: "Nitroglicerina", principioAtivo: "Trinitrato de glicerila",
+                comercial: "Tridil", apresentacao: "Solução 5mg/mL",
+                quantidade: 290, quantidadeMaxima: 400,
+                conservacao: "15°C-30°C. Proteger da luz.",
+                diluicao: "Diluir em SG 5% (100μg/mL).",
+                doseUsual: "Inicial: 5μg/min",
+                efeitosColaterais: "Cefaleia, hipotensão", status: "normal"
+            }
+        ];
+
+        let medicamentosFiltrados = [...medicamentos];
+        let proximoId = 11;
+
+        function renderizarMedicamentos(lista) {
+            const grid = document.getElementById('medicationsGrid');
+            grid.innerHTML = lista.map(med => {
+                const badgeClass = `badge-${med.status}`;
+                const badgeText = med.status === 'critico' ? 'Estoque baixo ' : med.status === 'atencao' ? 'Estoque médio' : 'Normal';
+                const porcentagem = ((med.quantidade / med.quantidadeMaxima) * 100).toFixed(1);
+
+                return `
+                    <div class="medication-card ${med.status === 'critico' ? 'critical' : ''}">
+                        <div class="card-header">
+                            <div style="flex: 1;">
+                                <div class="medication-name">${med.nome}</div>
+                                <div class="medication-active">${med.principioAtivo}</div>
+                            </div>
+                            <span class="status-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="stock-info"><strong>Estoque:</strong> ${med.quantidade}/${med.quantidadeMaxima} un. (${porcentagem}%)</div>
+                            <div class="stock-info"><strong>Comercial:</strong> ${med.comercial}</div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-info" onclick="verDetalhes(${med.id})">Informações</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            atualizarEstatisticas();
+        }
+
+        function atualizarEstatisticas() {
+            document.getElementById('totalMeds').textContent = medicamentos.length;
+            document.getElementById('normalMeds').textContent = medicamentos.filter(m => m.status === 'normal').length;
+            document.getElementById('criticalMeds').textContent = medicamentos.filter(m => m.status === 'critico').length;
+        }
+
+        function filtrarStatus(status) {
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            medicamentosFiltrados = status === 'todos' ? [...medicamentos] : medicamentos.filter(m => m.status === status);
+            renderizarMedicamentos(medicamentosFiltrados);
+        }
+
+        function buscar() {
+            const termo = document.getElementById('searchInput').value.toLowerCase();
+            medicamentosFiltrados = medicamentos.filter(m => 
+                m.nome.toLowerCase().includes(termo) || m.principioAtivo.toLowerCase().includes(termo)
+            );
+            renderizarMedicamentos(medicamentosFiltrados);
+        }
+
+        function verDetalhes(id) {
+            const med = medicamentos.find(m => m.id === id);
+            document.getElementById('modalTitle').textContent = med.nome;
+            document.getElementById('modalDetails').innerHTML = `
+                <div class="detalhe-item"><strong>Princípio Ativo:</strong><span>${med.principioAtivo}</span></div>
+                <div class="detalhe-item"><strong>Nome Comercial:</strong><span>${med.comercial}</span></div>
+                <div class="detalhe-item"><strong>Apresentação:</strong><span>${med.apresentacao}</span></div>
+                <div class="detalhe-item"><strong>Estoque:</strong><span>${med.quantidade}/${med.quantidadeMaxima} unidades</span></div>
+                <div class="detalhe-item"><strong>Conservação:</strong><span>${med.conservacao}</span></div>
+                <div class="detalhe-item"><strong>Diluição:</strong><span>${med.diluicao}</span></div>
+                <div class="detalhe-item"><strong>Dose Usual:</strong><span>${med.doseUsual}</span></div>
+                <div class="detalhe-item"><strong>Efeitos Colaterais:</strong><span>${med.efeitosColaterais}</span></div>
+            `;
+            document.getElementById('detailsModal').classList.add('show');
+        }
+
+        function abrirModalCadastro() {
+            document.getElementById('cadastroModal').classList.add('show');
+        }
+
+        function fecharModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        function cadastrarMedicamento(e) {
+            e.preventDefault();
+            const quantidade = parseInt(document.getElementById('cadQuantidade').value);
+            const maxima = parseInt(document.getElementById('cadMaxima').value);
+            const porcentagem = (quantidade / maxima) * 100;
+            const status = porcentagem <= 30 ? 'critico' : porcentagem <= 60 ? 'atencao' : 'normal';
+
+            medicamentos.push({
+                id: proximoId++,
+                nome: document.getElementById('cadNome').value,
+                principioAtivo: document.getElementById('cadPrincipio').value,
+                comercial: document.getElementById('cadComercial').value || 'Não informado',
+                apresentacao: document.getElementById('cadApresentacao').value,
+                quantidade, quantidadeMaxima: maxima,
+                conservacao: document.getElementById('cadConservacao').value,
+                diluicao: document.getElementById('cadDiluicao').value || 'Não informado',
+                doseUsual: document.getElementById('cadDose').value || 'Não informado',
+                efeitosColaterais: document.getElementById('cadEfeitos').value || 'Não informado',
+                status
+            });
+
+            medicamentosFiltrados = [...medicamentos];
+            renderizarMedicamentos(medicamentosFiltrados);
+            fecharModal('cadastroModal');
+            e.target.reset();
+            alert('Medicamento cadastrado com sucesso!');
+        }
+
+        renderizarMedicamentos(medicamentos);
+    </script>
+</body>
+</html>
