@@ -15,16 +15,17 @@ export class MedicamentoService {
     dataVal: Number;
     lote: Number;
     no_estoque: Number;
+    complemento: String;
   }): Medicamento {
-    const medicamentoCreated = new Medicamento(
-      Medicamento.nome;
-      Medicamento.dosegem;
-      Medicamento.forma_administrativa;
-      Medicamento.dataFab;
-      Medicamento.dataVal;
-      Medicamento.lote;
-      Medicamento.no_estoque;
-      Medicamento.complemento;
+    const medicamentoCreated = Medicamento.create(
+      medicamento.nome,
+      medicamento.dosegem,
+      medicamento.forma_administrativa,
+      medicamento.dataFab,
+      medicamento.dataVal,
+      medicamento.lote,
+      medicamento.no_estoque,
+      medicamento.complemento,  
     );
     this.lista.push(medicamentoCreated);
     return medicamentoCreated;
