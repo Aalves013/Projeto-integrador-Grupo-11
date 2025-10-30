@@ -1,6 +1,5 @@
 export class Medicamento {
   constructor(
-    private id: String,
     private nome: String,
     private dosegem: Number,
     private forma_administrativa: String,
@@ -22,7 +21,6 @@ export class Medicamento {
   }
 
   static create(
-    id: String,
     nome: String,
     dosegem: Number,
     forma_administrativa: String,
@@ -33,7 +31,6 @@ export class Medicamento {
     complemento: String
   ) {
     return new Medicamento(
-      id,
       nome,
       dosegem,
       forma_administrativa,
@@ -43,10 +40,6 @@ export class Medicamento {
       no_estoque,
       complemento
     );
-  }
-
-  getID(): String {
-    return this.id;
   }
 
   getNome(): String {
